@@ -4,7 +4,7 @@ title: 需求与边界
 parent: CORE-INDEX
 summary: 插件目标、用户约束、功能范围和环境前提
 related: [SYS-COMMANDS, SYS-CHAT, ENG-ARCH, ENG-VERIFY, OPS-DEPLOY, REG-STATE]
-paths: ["docs/product/PRD-SCOPE-需求与边界.md"]
+paths: ["docs/product/PRD-SCOPE-需求与边界.md", "疑点解释.md", "docs/sources/用户补充截图.png"]
 ---
 # PRD-SCOPE · 需求与边界
 

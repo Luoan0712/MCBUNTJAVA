@@ -3,7 +3,7 @@
 Minecraft **Java / Paper** 服务器基础管理插件。  
 面向单服运维：踢出、封禁、禁言、公告、在线查询、防刷屏、操作审计，以及可取消的倒计时重启。
 
-> **当前仓库状态**：文档与设计契约已建立；源码、构建产物与真机验收以 [开发状态](docs/registry/REG-STATE-决策与开发状态.md) 为准。设计目标不等于已交付功能。
+> **当前仓库状态**：基础版 **0.1.0** 源码、Gradle 工程与自动化测试已实现；构建、本机服务端验证和待完成的玩家验收以 [开发状态](docs/registry/REG-STATE-决策与开发状态.md) 为准。
 
 ---
 
@@ -38,7 +38,7 @@ Minecraft **Java / Paper** 服务器基础管理插件。
 
 ---
 
-## 安装（概念步骤）
+## 安装
 
 1. 用项目 Gradle Wrapper 构建，得到可安装的 `MCBUNTAdmin.jar`。  
 2. 在测试服验证后再上生产；维护窗口内**正常停服**（不要在运行中覆盖 JAR）。  
@@ -196,9 +196,9 @@ Minecraft **Java / Paper** 服务器基础管理插件。
 
 ---
 
-## 构建（规划）
+## 构建
 
-源码与 Gradle 工程就绪后，预期入口为：
+先将 JDK 25 设置为 `JAVA_HOME`，使用仓库内的 Gradle Wrapper：
 
 ```powershell
 # Windows
@@ -210,7 +210,7 @@ Minecraft **Java / Paper** 服务器基础管理插件。
 ./gradlew clean build
 ```
 
-依赖锁定与输出 JAR 名称以实际构建文件为准；详见架构文档与 REG-STATE。
+安装包输出为 `build/libs/MCBUNTAdmin.jar`。构建会执行自动化测试；玩家操作和生产服务器联调状态见 REG-STATE。
 
 ---
 

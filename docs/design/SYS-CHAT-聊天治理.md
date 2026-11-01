@@ -4,7 +4,7 @@ title: 聊天治理
 parent: CORE-INDEX
 summary: 公共聊天禁言、防刷屏判定、动作与异步事件边界
 related: [PRD-SCOPE, SYS-COMMANDS, ENG-ARCH, ENG-VERIFY, REG-STATE]
-paths: ["docs/design/SYS-CHAT-聊天治理.md"]
+paths: ["docs/design/SYS-CHAT-聊天治理.md", "src/main/java/mcbunt/admin/chat"]
 ---
 # SYS-CHAT · 聊天治理
 

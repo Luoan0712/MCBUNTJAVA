@@ -4,7 +4,7 @@ title: 命令与权限
 parent: CORE-INDEX
 summary: 管理命令的语法、权限、处罚语义与重启行为
 related: [PRD-SCOPE, SYS-CHAT, ENG-ARCH, ENG-VERIFY, OPS-DEPLOY, REG-STATE]
-paths: ["docs/design/SYS-COMMANDS-命令与权限.md"]
+paths: ["docs/design/SYS-COMMANDS-命令与权限.md", "src/main/java/mcbunt/admin/command", "src/main/java/mcbunt/admin/restart"]
 ---
 # SYS-COMMANDS · 命令与权限
 
@@ -60,6 +60,8 @@ paths: ["docs/design/SYS-COMMANDS-命令与权限.md"]
 | `/tps` 及其 Paper 原生命名空间入口 | 维持 Paper 行为，验收其实际权限 |
 
 只有表内管理入口属于接管范围；不改写普通聊天、其他插件命令或任意带冒号的输入。`/say` 保留原生行为，不冒充 `/broadcast`。本插件不注册、不调用封 IP 命令；原生 IP 管理入口不转成玩家处罚。
+
+原生命名空间也在运行时命令树中接管，因此 `execute run minecraft:ban` 等运行时嵌套调用共用插件校验与审计。启动时已解析并缓存原生节点的数据包函数不承诺被追溯替换，本版不新增数据包管理能力。
 
 优先使用 Paper 公共命令注册能力。同名主标签能够覆盖已有命令，但别名不会覆盖已有标签，因此 `/pardon`、`/list` 即便与新命令同义，也应独立注册主标签并共享执行器。注册结果与最终可执行行为都要验收。[Paper Commands API](https://jd.papermc.io/paper/26.3/io/papermc/paper/command/brigadier/Commands.html)
 

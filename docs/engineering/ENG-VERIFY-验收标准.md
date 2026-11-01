@@ -4,7 +4,7 @@ title: 验收标准
 parent: CORE-INDEX
 summary: 管理插件的必要行为检查、真实服务器专项与交付完成标准
 related: [PRD-SCOPE, SYS-COMMANDS, SYS-CHAT, ENG-ARCH, OPS-DEPLOY, REG-STATE]
-paths: ["docs/engineering/ENG-VERIFY-验收标准.md"]
+paths: ["docs/engineering/ENG-VERIFY-验收标准.md", "src/test/java"]
 ---
 # ENG-VERIFY · 验收标准
 
@@ -59,7 +59,7 @@ paths: ["docs/engineering/ENG-VERIFY-验收标准.md"]
 | V-16 | 有防刷屏豁免和无豁免的玩家做相同操作 | 只对无豁免者限流；防刷屏豁免不自动解除已有人工禁言 |
 | V-17 | 被禁言玩家使用公共聊天、`/msg`、`/me` 和其他插件频道 | 公共聊天受控；其余渠道属于本版范围外，不把未覆盖渠道误报为已禁言成功 |
 | V-18 | 无管理权限玩家尝试所有管理命令及别名；逐项授予命令权限再试 | 无权限不产生效果；单项授权只开放对应行为；别名和接管入口权限一致 |
-| V-19 | 普通玩家、OP、控制台/RCON 分别执行短命令、插件命名空间及 SYS-COMMANDS 列明的原生命名空间入口 | 受管入口共用业务服务与审计，不留权限或日志绕过；`/tps` 按 Paper 原生权限；短命令无需依赖 `m` 前缀入口 |
+| V-19 | 普通玩家、OP、控制台/RCON 分别执行短命令、插件命名空间及 SYS-COMMANDS 列明的原生命名空间入口，再通过 execute run 调用 | 受管运行时入口共用业务服务与审计，不留权限或日志绕过；`/tps` 按 Paper 原生权限；短命令无需依赖 `m` 前缀入口 |
 | V-19a | 命令方块执行本插件管理入口；安装有命令冲突插件时再检查入口 | 命令方块明确拒绝且无管理效果；冲突按契约处理，不静默接管到错误实现 |
 | V-20 | 同中转 IP 的玩家 A 被封禁，玩家 B 登录与聊天 | A 被阻止，B 不被连带处罚；插件不调用封 IP 接口、不写 IP 封禁记录 |
 

@@ -1,0 +1,51 @@
+name: MCBUNTAdmin
+version: '${version}'
+main: mcbunt.admin.MCBUNTAdminPlugin
+api-version: '26.3'
+description: Single-server administration, chat moderation and operation audit.
+authors: [Luoan0712]
+permissions:
+  mcbunt.admin.kick:
+    description: Kick an online player.
+    default: op
+  mcbunt.admin.ban:
+    description: Ban a player profile.
+    default: op
+  mcbunt.admin.unban:
+    description: Remove a player profile ban.
+    default: op
+  mcbunt.admin.mute:
+    description: Mute a player in public chat.
+    default: op
+  mcbunt.admin.unmute:
+    description: Remove a public-chat mute.
+    default: op
+  mcbunt.admin.muteinfo:
+    description: Inspect a public-chat mute.
+    default: op
+  mcbunt.admin.online:
+    description: List online players.
+    default: op
+  mcbunt.admin.restart:
+    description: Schedule or cancel a server restart.
+    default: op
+  mcbunt.admin.broadcast:
+    description: Send a server announcement.
+    default: op
+  mcbunt.admin.antispam.bypass:
+    description: Bypass anti-spam checks without bypassing manual mutes.
+    default: op
+  mcbunt.admin.*:
+    description: All MCBUNTAdmin permissions.
+    default: op
+    children:
+      mcbunt.admin.kick: true
+      mcbunt.admin.ban: true
+      mcbunt.admin.unban: true
+      mcbunt.admin.mute: true
+      mcbunt.admin.unmute: true
+      mcbunt.admin.muteinfo: true
+      mcbunt.admin.online: true
+      mcbunt.admin.restart: true
+      mcbunt.admin.broadcast: true
+      mcbunt.admin.antispam.bypass: true

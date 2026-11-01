@@ -1,0 +1,30 @@
+# Configuration contract: ENG-ARCH. Reload with a full server restart.
+schema-version: 1
+
+ban:
+  default-duration: perm
+mute:
+  default-duration: 30m
+
+messages:
+  default-reasons:
+    ban: 违反服务器规则
+    mute: 违反聊天规则
+    kick: 管理员已将你移出服务器
+
+restart:
+  default-seconds: 60
+  announce-seconds: [60, 30, 10, 5, 4, 3, 2, 1]
+
+antispam:
+  enabled: true
+  window-seconds: 5
+  max-messages: 4
+  duplicate-check: true
+  action: cancel
+  auto-mute-seconds: 120
+
+logging:
+  record: [ban, unban, mute, unmute, kick, broadcast, antispam, restart]
+  max-size-mb: 5
+  keep-files: 10

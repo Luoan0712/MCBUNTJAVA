@@ -4,11 +4,11 @@ title: 架构与数据
 parent: CORE-INDEX
 summary: 构建目标、模块职责、线程边界、配置键、持久化和操作日志契约
 related: [PRD-SCOPE, SYS-COMMANDS, SYS-CHAT, ENG-VERIFY, OPS-DEPLOY, REG-STATE]
-paths: ["docs/engineering/ENG-ARCH-架构与数据.md"]
+paths: ["docs/engineering/ENG-ARCH-架构与数据.md", "src/main/java/mcbunt/admin/MCBUNTAdminPlugin.java", "src/main/java/mcbunt/admin/core", "src/main/java/mcbunt/admin/config", "src/main/java/mcbunt/admin/moderation", "src/main/java/mcbunt/admin/audit", "src/main/resources", "build.gradle.kts", "settings.gradle.kts", "gradle.properties", "gradle", "gradlew", "gradlew.bat", ".gitignore", ".gitattributes"]
 ---
 # ENG-ARCH · 架构与数据
 
-> **范围**：规定单插件的实现边界、状态归属、配置和落盘契约；文中的代码组织均为规划。
+> **范围**：规定单插件的实现边界、状态归属、配置和落盘契约；具体签名以所辖源码为准。
 > **不在本文**：命令参数与权限见 [SYS-COMMANDS](../design/SYS-COMMANDS-命令与权限.md)，聊天判定见 [SYS-CHAT](../design/SYS-CHAT-聊天治理.md)，部署动作见 [OPS-DEPLOY](../operations/OPS-DEPLOY-部署与重启.md)。
 > **查阅**：先读 §0；改状态读 §3，改配置读 §4，改日志读 §5。
 
@@ -29,9 +29,9 @@ paths: ["docs/engineering/ENG-ARCH-架构与数据.md"]
 
 使用 `plugin.yml` 描述主类、权限与 `api-version: '26.3'`；通过主类的命令生命周期 API 注册命令，不在 plugin.yml 再注册一套相同命令。api-version 声明 API 基线并拒绝更旧版本，不能锁定 build 226 或保证其他平台不加载。[官方版本语义](https://docs.papermc.io/paper/dev/plugin-yml/#api-version)
 
-| 职责 | 拥有的行为与状态 | 规划位置，尚未创建 |
+| 职责 | 拥有的行为与状态 | 源码位置 |
 | --- | --- | --- |
-| 插件入口与配置 | 初始化、依赖装配、启动配置校验、关闭资源 | src/main/java/mcbunt/admin/ |
+| 插件入口与配置 | 初始化、依赖装配、启动配置校验、关闭资源 | src/main/java/mcbunt/admin/MCBUNTAdminPlugin.java、config/、core/ |
 | 命令入口 | 语法、权限、精确入口路由、响应；不重复处罚逻辑 | 同一包下 command/ |
 | 玩家身份与处罚 | UUID 解析、Paper Profile 封禁、禁言快照与提交 | 同一包下 moderation/ |
 | 聊天治理 | 按 UUID 的滑窗状态、重复判定、读取禁言快照 | 同一包下 chat/ |
@@ -45,7 +45,7 @@ paths: ["docs/engineering/ENG-ARCH-架构与数据.md"]
 
 优先通过 `LifecycleEvents.COMMANDS` 的公开注册器注册。Paper 主命令标签会覆盖已有标签，普通 alias 不会覆盖已有命令；因此 pardon/list 等已有入口作为主标签注册并共享同一执行逻辑，不能仅列为 alias。[注册 API](https://jd.papermc.io/paper/26.3/io/papermc/paper/command/brigadier/Commands.html)
 
-原生管理命名空间按 SYS-COMMANDS 的入口表处理。注册器无法统一覆盖的入口，可用公开玩家命令、控制台命令和远程命令事件精确转向插件的规范命名空间；只匹配表内标签并保留参数，不拦截任意命令、不递归重派、不靠反射修改服务端内部表。注册后记录成功标签，缺失的必需入口视为该功能未完成，不能只展示插件命名空间来通过验收。
+原生管理命名空间按 SYS-COMMANDS 的入口表，通过公开注册器替换对应主标签，共用业务执行器；运行时 execute 的内层调用也应进入同一处理。玩家命令、控制台和远程命令事件只精确路由表内标签，不拦截任意命令、不递归重派、不靠反射修改服务端内部表。注册后记录成功标签，缺失的必需入口视为该功能未完成，不能只展示插件命名空间来通过验收。启动阶段已解析并缓存原生节点的数据包函数不属于本版的统一审计承诺。
 
 命令服务和服务器状态变更在主线程执行。控制台/RCON 进入服务前也校验来源和权限；程序内部再次调用同一服务，避免把权限只放在玩家事件监听器。
 
@@ -89,7 +89,7 @@ AsyncChatEvent 监听同步完成取消决定，读取不可变禁言/权限快�
 
 ## 4 配置契约
 
-运行时 `plugins/MCBUNTAdmin/config.yml` 随首次启用生成，基础版通过完整重启加载配置，不增加热重载命令。文件尚未实现前，以下表为配置键契约；默认参数以“默认值权威”指向处为准。
+运行时 `plugins/MCBUNTAdmin/config.yml` 随首次启用生成，基础版通过完整重启加载配置，不增加热重载命令。以下表规定配置键；分发默认值在 src/main/resources/config.yml，设计参数以“默认值权威”指向处为准，调整时同批维护。
 
 | 配置键 | 类型 | 默认值权威或固定值 | 约束 |
 | --- | --- | --- | --- |

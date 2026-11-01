@@ -15,7 +15,7 @@ paths: ["docs/operations/OPS-DEPLOY-部署与重启.md"]
 ## 0 结论
 
 - 本文规定实施后的操作步骤；实际执行与环境核实结果只在 REG-STATE 登记。
-- 构建目标由 PRD-SCOPE「环境与交付前提」与 ENG-ARCH「构建与职责」规定；构建工具到位后才执行本文命令。
+- 构建目标由 PRD-SCOPE「环境与交付前提」与 ENG-ARCH「构建与职责」规定；使用仓库内 Gradle Wrapper。
 - 插件只负责倒计时和优雅停止；进程重新启动由已核实的外部守护负责。
 - 本版不新建 Web 面板、桌面 EXE、RCON 或 SSH 管理通道；已有通道是否可用不作为插件部署成功依据。
 
@@ -40,7 +40,7 @@ paths: ["docs/operations/OPS-DEPLOY-部署与重启.md"]
 
 ## 2 构建与安装
 
-下列命令在源码、Wrapper 和构建文件到位后执行；是否已验证以 REG-STATE 为准。
+设置目标 JDK 的 JAVA_HOME 后，在项目根目录执行；环境与执行结果以 REG-STATE 为准。
 
 Windows PowerShell，在项目根目录：
 
@@ -54,7 +54,7 @@ Linux/macOS，在项目根目录：
 ./gradlew clean build
 ```
 
-构建前使用目标 JDK；依赖锁定方式与输出 JAR 名称由实际构建文件确定。交付时提供可安装的管理插件 JAR，不把 sources、javadoc 或未完成构建产物当作安装包。[Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html)
+构建前使用目标 JDK；依赖由构建文件锁定，安装包输出为 `build/libs/MCBUNTAdmin.jar`。交付时提供可安装的管理插件 JAR，不把 sources、javadoc 或未完成构建产物当作安装包。[Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html)
 
 安装顺序：
 
